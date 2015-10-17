@@ -1,17 +1,17 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ▓█████▄ ▓█████  ██▀███    ██████  ██░ ██  ▒█████   ██ ▄█▀ █    ██   ██████
-" ▒██▀ ██▌▓█   ▀ ▓██ ▒ ██▒▒██    ▒ ▓██░ ██▒▒██▒  ██▒ ██▄█▒  ██  ▓██▒▒██    ▒ 
-" ░██   █▌▒███   ▓██ ░▄█ ▒░ ▓██▄   ▒██▀▀██░▒██░  ██▒▓███▄░ ▓██  ▒██░░ ▓██▄   
+" ▒██▀ ██▌▓█   ▀ ▓██ ▒ ██▒▒██    ▒ ▓██░ ██▒▒██▒  ██▒ ██▄█▒  ██  ▓██▒▒██    ▒
+" ░██   █▌▒███   ▓██ ░▄█ ▒░ ▓██▄   ▒██▀▀██░▒██░  ██▒▓███▄░ ▓██  ▒██░░ ▓██▄
 " ░▓█▄   ▌▒▓█  ▄ ▒██▀▀█▄    ▒   ██▒░▓█ ░██ ▒██   ██░▓██ █▄ ▓▓█  ░██░  ▒   ██▒
 " ░▒████▓ ░▒████▒░██▓ ▒██▒▒██████▒▒░▓█▒░██▓░ ████▓▒░▒██▒ █▄▒▒█████▓ ▒██████▒▒
 "  ▒▒▓  ▒ ░░ ▒░ ░░ ▒▓ ░▒▓░▒ ▒▓▒ ▒ ░ ▒ ░░▒░▒░ ▒░▒░▒░ ▒ ▒▒ ▓▒░▒▓▒ ▒ ▒ ▒ ▒▓▒ ▒ ░
 "  ░ ▒  ▒  ░ ░  ░  ░▒ ░ ▒░░ ░▒  ░ ░ ▒ ░▒░ ░  ░ ▒ ▒░ ░ ░▒ ▒░░░▒░ ░ ░ ░ ░▒  ░ ░
-"  ░ ░  ░    ░     ░░   ░ ░  ░  ░   ░  ░░ ░░ ░ ░ ▒  ░ ░░ ░  ░░░ ░ ░ ░  ░  ░  
-"    ░       ░  ░   ░           ░   ░  ░  ░    ░ ░  ░  ░      ░           ░  
-" 
+"  ░ ░  ░    ░     ░░   ░ ░  ░  ░   ░  ░░ ░░ ░ ░ ▒  ░ ░░ ░  ░░░ ░ ░ ░  ░  ░
+"    ░       ░  ░   ░           ░   ░  ░  ░    ░ ░  ░  ░      ░           ░
+"
 " My custom .vimrc config 2015.
 "
-" Sections: 
+" Sections:
 "   * Vundle
 "   * Visual
 "   * General
@@ -34,15 +34,17 @@ Plug 'powerman/vim-plugin-viewdoc'
 Plug 'altercation/vim-colors-solarized'
 Plug 'chriskempson/base16-vim'
 Plug 'tomasr/molokai'
-Plug 'scrooloose/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 
 " Just fot Vim 7.4 version
 if v:version >= 704
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
-Plug 'mhinz/vim-startify'             
-Plug 'MattesGroeger/vim-bookmarks'    
-Plug 'kien/ctrlp.vim'             
+
+Plug 'mhinz/vim-startify'
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'kien/ctrlp.vim'
 Plug 'Valloric/YouCompleteMe'
 Plug 'tpope/vim-dispatch'
 " Plug 'bling/vim-airline' | Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
@@ -51,7 +53,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'Shougo/unite.vim' | Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
-Plug 'majutsushi/tagbar'
 Plug 'rbgrouleff/bclose.vim'
 Plug 'vim-scripts/a.vim'
 Plug 'dccmx/vim-lemon-syntax'
@@ -143,7 +144,7 @@ set autoindent                         " enable auto indents
 set expandtab                          " tabs to spaces
 set smartindent                        " tabs after { and others
 
-""" 
+"""
 set nobackup        " do not create backup files
 set noswapfile      " do not create swap files
 
@@ -322,3 +323,11 @@ nnoremap <silent> <leader>B :DbgWrapper ./main<cr>
 let g:unite_source_rec_async_command =
         \ ['ag', '--follow', '--nocolor', '--nogroup',
         \  '--hidden', '']
+
+
+
+" Auto commands {{{
+
+" Delete all ending spaces before save
+autocmd FileType c,cpp,java,php autocmd BufWritePre * :%s/\s\+$//e
+" }}}
