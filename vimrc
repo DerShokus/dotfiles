@@ -124,7 +124,6 @@ set noautochdir                        " do not change directory
 set wrap                               " do wrap
 set linebreak                          " do not break words
 set hidden                             " do not reset buffer
-set mouse=a                            " enable mouse in console
 set showcmd                            " auto complete for commands
 set autoread                           " auto reread file
 set confirm                            " show dialogs
@@ -163,6 +162,13 @@ set spl=en spell
 set nospell
 
 set nowrap
+
+" Splists resizing by mouse
+set mouse=a                            " enable mouse in console
+if &term =~ '^screen'
+    " tmux knows the extended mouse mode
+    set ttymouse=xterm2
+endif
 
 " }}}
 
