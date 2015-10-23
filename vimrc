@@ -11,13 +11,6 @@
 "
 " My custom .vimrc config 2015.
 "
-" Sections:
-"   * Vundle
-"   * Visual
-"   * General
-"   * Hotkeys
-"   * Platforms
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Заменяет стандартную <leader> с '\' на ','
@@ -31,11 +24,8 @@ call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
 Plug 'powerman/vim-plugin-viewdoc'
-Plug 'altercation/vim-colors-solarized'
-Plug 'chriskempson/base16-vim'
-Plug 'tomasr/molokai'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+Plug 'majutsushi/tagbar'
 
 " Just fot Vim 7.4 version
 if v:version >= 704
@@ -47,10 +37,8 @@ Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
 Plug 'Valloric/YouCompleteMe'
 Plug 'tpope/vim-dispatch'
-" Plug 'bling/vim-airline' | Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
-Plug 'ryanoasis/vim-devicons' | Plug 'ryanoasis/nerd-fonts', { 'do': 'bash ./install.sh' }
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
+Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
+"Plug 'ryanoasis/vim-devicons' | Plug 'ryanoasis/nerd-fonts', { 'do': 'bash ./install.sh' }
 Plug 'Shougo/unite.vim' | Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
 Plug 'rbgrouleff/bclose.vim'
@@ -58,28 +46,26 @@ Plug 'vim-scripts/a.vim'
 Plug 'dccmx/vim-lemon-syntax'
 Plug 'rking/ag.vim'
 Plug 'vim-scripts/google.vim'
-Plug 'twe4ked/vim-colorscheme-switcher'
 Plug 'aperezdc/vim-template'
-Plug 'ManOfTeflon/exterminator'
-
+"
+" {{{ Colorschemes
+Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
+Plug 'tomasr/molokai'
+"Plug 'twe4ked/vim-colorscheme-switcher'
 "Plug 'junegunn/seoul256.vim'
+" }}}
+"
+" {{{ Git helpers
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+" }}}
+
+" {{{ Try it at free time
 "Plug 'junegunn/vim-easy-align'
-
-" On-demand loading
-"Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-"Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
-" Using git URL
-"Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
-" Plugin options
-"Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-
-" Plugin outside ~/.vim/plugged with post-update hook
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-
-" Unmanaged plugin (manually installed and updated)
-"Plug '~/my-prototype-plugin'
+" Gdb helper (can't to build)
+"Plug 'ManOfTeflon/exterminator'
+" }}}
 
 call plug#end()
 
@@ -96,14 +82,12 @@ if has("gui_running")
     endif
 else
     set background=dark
-    colorscheme solarized
+    colorscheme base16-default
     set t_Co=16
 endif
 
 
 
-
-let g:airline_powerline_fonts = 1
 let g:tagbar_iconchars = ['▸', '▾']
 let g:ycm_global_ycm_extra_onf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
 let g:webdevicons_enable = 0
@@ -174,7 +158,7 @@ endif
 " }}}
 
 
-" Base keymaps
+" {{{ Base keymaps
 
 " use normal up/down
 nmap <DOWN>     j
@@ -191,7 +175,6 @@ imap <C-a>      <C-o>^
 " for visual mode go to the end of a line without \n symbol
 vmap <C-e>      $h
 vmap <C-a>      ^
-
 " normal page up/down
 nmap <PageUp>   <C-U><C-U>
 imap <PageUp>   <C-O><C-U><C-O><C-U>
@@ -242,40 +225,28 @@ endif
 " (главное не замапить обратно т.к. рекурсия)
 map ; :
 
+" }}}
 
 
-
-
-
-
-
-
-
+" {{{ Plugin's keymaps
 nmap <F9> :TagbarToggle<CR>
 nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>q :Bclose<cr>
+
 "nmap <leader>l :Unite -buffer-name=files buffer<cr>
 "nmap <leader>l :FufBuffer<cr>
 nmap <leader>l :CtrlPBuffer<cr>
-nmap <C-]> :YcmCompleter GoTo<cr>
 nmap <leader>m :Make<cr>
-nmap <C-TAB> :A<cr>
 
+nmap <C-]> :YcmCompleter GoTo<cr>
+nmap <C-TAB> :A<cr>
+" }}}
 
 " для tmux-like разделителя
 set encoding=utf8
 set fillchars=vert:\│
 
-" powerline symbols
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-
-
-
-
-
+" {{{ Gdb wrapper options
 
 function! s:get_range()
   " Why is this not a built-in Vim script function?!
@@ -314,6 +285,8 @@ command! -nargs=1 DbgWrapper    call s:start_debugging(<f-args>)
 
 nnoremap <silent> <leader>B :DbgWrapper ./main<cr>
 
+" }}}
+
 
 " Unite
 "let g:unite_source_grep_command = 'ag'
@@ -330,4 +303,58 @@ let g:unite_source_rec_async_command =
 
 " Delete all ending spaces before save
 autocmd FileType c,cpp,java,php autocmd BufWritePre * :%s/\s\+$//e
+autocmd FileType vim set foldmethod=marker
+" }}}
+
+
+
+" {{{ Light line settings
+" Try it ;)
+"let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'fugitive': 'LightLineFugitive',
+      \   'readonly': 'LightLineReadonly',
+      \   'modified': 'LightLineModified',
+      \   'filename': 'LightLineFilename'
+      \ },
+      \ }
+" it's very sad but this symbols a slowly on my iTerm2 ;_;
+"      \ 'separator': { 'left': '⮀', 'right': '⮂' },
+"      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+
+function! LightLineModified()
+  if &filetype == "help"
+    return ""
+  elseif &modified
+    return "+"
+  elseif &modifiable
+    return ""
+  else
+    return ""
+  endif
+endfunction
+
+function! LightLineReadonly()
+  if &filetype == "help"
+    return ""
+  elseif &readonly
+    return "⭤"
+  else
+    return ""
+  endif
+endfunction
+
+function! LightLineFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
+
+function! LightLineFilename()
+  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+       \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+endfunction
 " }}}
