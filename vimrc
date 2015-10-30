@@ -1,17 +1,13 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ▓█████▄ ▓█████  ██▀███    ██████  ██░ ██  ▒█████   ██ ▄█▀ █    ██   ██████
-" ▒██▀ ██▌▓█   ▀ ▓██ ▒ ██▒▒██    ▒ ▓██░ ██▒▒██▒  ██▒ ██▄█▒  ██  ▓██▒▒██    ▒
-" ░██   █▌▒███   ▓██ ░▄█ ▒░ ▓██▄   ▒██▀▀██░▒██░  ██▒▓███▄░ ▓██  ▒██░░ ▓██▄
-" ░▓█▄   ▌▒▓█  ▄ ▒██▀▀█▄    ▒   ██▒░▓█ ░██ ▒██   ██░▓██ █▄ ▓▓█  ░██░  ▒   ██▒
-" ░▒████▓ ░▒████▒░██▓ ▒██▒▒██████▒▒░▓█▒░██▓░ ████▓▒░▒██▒ █▄▒▒█████▓ ▒██████▒▒
-"  ▒▒▓  ▒ ░░ ▒░ ░░ ▒▓ ░▒▓░▒ ▒▓▒ ▒ ░ ▒ ░░▒░▒░ ▒░▒░▒░ ▒ ▒▒ ▓▒░▒▓▒ ▒ ▒ ▒ ▒▓▒ ▒ ░
-"  ░ ▒  ▒  ░ ░  ░  ░▒ ░ ▒░░ ░▒  ░ ░ ▒ ░▒░ ░  ░ ▒ ▒░ ░ ░▒ ▒░░░▒░ ░ ░ ░ ░▒  ░ ░
-"  ░ ░  ░    ░     ░░   ░ ░  ░  ░   ░  ░░ ░░ ░ ░ ▒  ░ ░░ ░  ░░░ ░ ░ ░  ░  ░
-"    ░       ░  ░   ░           ░   ░  ░  ░    ░ ░  ░  ░      ░           ░
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"o-o            o-o  o        o                   o   o o-O-o o   o o--o    o-o
+"|  \          |     |        | /                 |   |   |   |\ /| |   |  /
+"|   O o-o o-o  o-o  O--o o-o OO   o  o o-o       o   o   |   | O | O-Oo  O
+"|  /  |-' |       | |  | | | | \  |  |  \         \ /    |   |   | |  \   \
+"o-o   o-o o   o--o  o  o o-o o  o o--o o-o     O   o   o-O-o o   o o   o   o-o
 "
 " My custom .vimrc config 2015.
 "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Заменяет стандартную <leader> с '\' на ','
 " Changing "mapleader" after that has no effect for already defined mappings.
@@ -310,7 +306,7 @@ autocmd FileType vim set foldmethod=marker
 
 " {{{ Light line settings
 " Try it ;)
-"let g:lightline = {
+let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'fugitive', 'filename' ] ]
@@ -342,7 +338,7 @@ function! LightLineReadonly()
   if &filetype == "help"
     return ""
   elseif &readonly
-    return "⭤"
+    return "RO"
   else
     return ""
   endif
@@ -358,3 +354,21 @@ function! LightLineFilename()
        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
 endfunction
 " }}}
+
+" for ultisnips
+let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
+
+
+"{{{ some special conde style %)
+function! BracketInsert()
+    let l:colum = col ('.')
+    if l:colum == 1 || getline('.')[col('.')-2] == ' '
+        return '('
+    else
+        return ' ('
+    endif
+endfunction
+
+"inoremap ( <C-r>=BracketInsert()<cr>
+"}}}
+
