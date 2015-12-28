@@ -32,8 +32,10 @@ Plug 'mhinz/vim-startify'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
 Plug 'Valloric/YouCompleteMe'
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tpope/vim-dispatch'
-Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
+"Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
+Plug 'bling/vim-airline'
 "Plug 'ryanoasis/vim-devicons' | Plug 'ryanoasis/nerd-fonts', { 'do': 'bash ./install.sh' }
 Plug 'Shougo/unite.vim' | Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
@@ -85,10 +87,11 @@ endif
 
 
 let g:tagbar_iconchars = ['▸', '▾']
-let g:ycm_global_ycm_extra_onf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
 let g:webdevicons_enable = 0
 let g:ag_highlight=1
-
+" for ultisnips
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
+let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
 
 "let &colorcolumn="80,".join(range(120,999),",")
 let &colorcolumn=join(range(81,999),",")
@@ -143,6 +146,7 @@ set spl=en spell
 set nospell
 
 set nowrap
+set cursorline
 
 " Splists resizing by mouse
 set mouse=a                            " enable mouse in console
@@ -306,57 +310,56 @@ autocmd FileType vim set foldmethod=marker
 
 " {{{ Light line settings
 " Try it ;)
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'fugitive', 'filename' ] ]
-      \ },
-      \ 'component_function': {
-      \   'fugitive': 'LightLineFugitive',
-      \   'readonly': 'LightLineReadonly',
-      \   'modified': 'LightLineModified',
-      \   'filename': 'LightLineFilename'
-      \ },
-      \ }
-" it's very sad but this symbols a slowly on my iTerm2 ;_;
-"      \ 'separator': { 'left': '⮀', 'right': '⮂' },
-"      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
-
-function! LightLineModified()
-  if &filetype == "help"
-    return ""
-  elseif &modified
-    return "+"
-  elseif &modifiable
-    return ""
-  else
-    return ""
-  endif
-endfunction
-
-function! LightLineReadonly()
-  if &filetype == "help"
-    return ""
-  elseif &readonly
-    return "RO"
-  else
-    return ""
-  endif
-endfunction
-
-function! LightLineFugitive()
-  return exists('*fugitive#head') ? fugitive#head() : ''
-endfunction
-
-function! LightLineFilename()
-  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
-       \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-endfunction
+"let g:lightline = {
+"      \ 'active': {
+"      \   'left': [ [ 'mode', 'paste' ],
+"      \             [ 'fugitive', 'filename' ] ]
+"      \ },
+"      \ 'component_function': {
+"      \   'fugitive': 'LightLineFugitive',
+"      \   'readonly': 'LightLineReadonly',
+"      \   'modified': 'LightLineModified',
+"      \   'filename': 'LightLineFilename'
+"      \ },
+"      \ }
+"" it's very sad but this symbols a slowly on my iTerm2 ;_;
+""      \ 'separator': { 'left': '⮀', 'right': '⮂' },
+""      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+"
+"function! LightLineModified()
+"  if &filetype == "help"
+"    return ""
+"  elseif &modified
+"    return "+"
+"  elseif &modifiable
+"    return ""
+"  else
+"    return ""
+"  endif
+"endfunction
+"
+"function! LightLineReadonly()
+"  if &filetype == "help"
+"    return ""
+"  elseif &readonly
+"    return "RO"
+"  else
+"    return ""
+"  endif
+"endfunction
+"
+"function! LightLineFugitive()
+"  return exists('*fugitive#head') ? fugitive#head() : ''
+"endfunction
+"
+"function! LightLineFilename()
+"  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+"       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+"       \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+"endfunction
 " }}}
 
-" for ultisnips
-let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
+
 
 
 "{{{ some special conde style %)
@@ -371,4 +374,5 @@ endfunction
 
 "inoremap ( <C-r>=BracketInsert()<cr>
 "}}}
+
 
