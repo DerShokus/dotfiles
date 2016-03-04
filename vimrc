@@ -31,7 +31,7 @@ endif
 Plug 'mhinz/vim-startify'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && bash ./install --clang-completer' }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'tpope/vim-dispatch'
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
@@ -48,10 +48,8 @@ Plug 'aperezdc/vim-template'
 "
 " {{{ Colorschemes
 Plug 'altercation/vim-colors-solarized'
-Plug 'chriskempson/base16-vim'
 Plug 'tomasr/molokai'
-"Plug 'twe4ked/vim-colorscheme-switcher'
-"Plug 'junegunn/seoul256.vim'
+Plug 'morhetz/gruvbox'
 " }}}
 "
 " {{{ Git helpers
@@ -80,8 +78,9 @@ if has("gui_running")
     endif
 else
     set background=dark
-    colorscheme base16-default
-    set t_Co=16
+    "colorscheme molokai
+    colorscheme gruvbox
+    set t_Co=256
 endif
 
 
@@ -242,9 +241,6 @@ nmap <C-]> :YcmCompleter GoTo<cr>
 nmap <C-TAB> :A<cr>
 " }}}
 
-" для tmux-like разделителя
-set encoding=utf8
-set fillchars=vert:\│
 
 " {{{ Gdb wrapper options
 
@@ -307,6 +303,10 @@ autocmd FileType vim set foldmethod=marker
 " }}}
 
 
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
 
 " {{{ Light line settings
 " Try it ;)
@@ -376,3 +376,8 @@ endfunction
 "}}}
 
 
+" для tmux-like разделителя
+set encoding=utf8
+set fillchars=vert:\│
+
+hi VertSplit cterm=none ctermbg=none
