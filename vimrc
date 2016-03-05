@@ -28,7 +28,10 @@ if v:version >= 704
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 endif
 
+Plug 'rhysd/vim-clang-format'
+
 Plug 'mhinz/vim-startify'
+Plug 'mileszs/ack.vim'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
 Plug 'Valloric/YouCompleteMe'
@@ -93,8 +96,7 @@ let g:ag_highlight=1
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
 let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
 
-"let &colorcolumn="80,".join(range(120,999),",")
-let &colorcolumn=join(range(81,999),",")
+autocmd FileType c,cpp let &colorcolumn=join(range(81,256),",")
 
 
 
@@ -237,6 +239,7 @@ nmap <leader>q :Bclose<cr>
 "nmap <leader>l :FufBuffer<cr>
 nmap <leader>l :CtrlPBuffer<cr>
 nmap <leader>m :Make<cr>
+nmap <leader>t :Dispatch ctest -V --output-on-failure<cr>
 
 nmap <C-]> :YcmCompleter GoTo<cr>
 nmap <C-TAB> :A<cr>
@@ -376,3 +379,8 @@ endfunction
 "}}}
 
 
+" powerline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
