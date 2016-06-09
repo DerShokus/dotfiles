@@ -31,11 +31,15 @@ endif
 Plug 'rhysd/vim-clang-format'
 
 Plug 'mhinz/vim-startify'
+Plug 'will133/vim-dirdiff'
 Plug 'mileszs/ack.vim'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
 Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && bash ./install --clang-completer' }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+Plug 'gilligan/vim-lldb'
+Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-dispatch'
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
 Plug 'bling/vim-airline'
@@ -53,6 +57,8 @@ Plug 'aperezdc/vim-template'
 Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
+Plug 'sjl/badwolf'
+Plug 'nanotech/jellybeans.vim'
 " }}}
 "
 " {{{ Git helpers
@@ -61,7 +67,7 @@ Plug 'tpope/vim-fugitive'
 " }}}
 
 " {{{ Try it at free time
-"Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align'
 " Gdb helper (can't to build)
 "Plug 'ManOfTeflon/exterminator'
 " }}}
@@ -73,16 +79,16 @@ call plug#end()
 
 if has("gui_running")
     set background=dark
-    colorscheme solarized
+    colorscheme jellybeans
     if has("gui_macvim")
-        set guifont=Sauce\ Code\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ Plus\ Pomicons:h14
+        set guifont=Menlo:h12
     else
         set guifont=Anonymous\ Pro\ for\ Powerline\ 14
     endif
 else
     set background=dark
-    "colorscheme molokai
-    colorscheme gruvbox
+    "colorscheme gruvbox
+    colorscheme jellybeans
     set t_Co=256
 endif
 
@@ -94,6 +100,7 @@ let g:ag_highlight=1
 " for ultisnips
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
 let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
+let g:clang_complete_macros = 1
 
 autocmd FileType c,cpp let &colorcolumn=join(range(81,256),",")
 
@@ -155,6 +162,9 @@ if &term =~ '^screen'
     " tmux knows the extended mouse mode
     set ttymouse=xterm2
 endif
+
+set relativenumber
+set number
 
 " }}}
 
@@ -233,15 +243,24 @@ map ; :
 nmap <F9> :TagbarToggle<CR>
 nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>q :Bclose<cr>
+nmap <leader>ff : NERDTreeFind<cr>
 
 "nmap <leader>l :Unite -buffer-name=files buffer<cr>
 "nmap <leader>l :FufBuffer<cr>
 nmap <leader>l :CtrlPBuffer<cr>
 nmap <leader>m :Make<cr>
-nmap <leader>t :Dispatch ctest -V --output-on-failure<cr>
+nmap <leader>t :Dispatch ctest --output-on-failure<cr>
+nmap <leader>c :Dispatch cppcheck .<cr>
 
 nmap <C-]> :YcmCompleter GoTo<cr>
 nmap <C-TAB> :A<cr>
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 " }}}
 
 
@@ -266,15 +285,15 @@ vnoremap <silent> <F6>  :GdbVEval<cr>
 nnoremap <silent> <F5>  :GdbLocals<CR>
 nnoremap <silent> <F4>  :GdbNoTrack<CR>
 
-nnoremap <silent> <Insert> :GdbContinue<cr>
-nnoremap <silent> <End> :GdbBacktrace<cr>
-nnoremap <silent> <Home> :GdbUntil<cr>
-nnoremap <silent> <S-Up> :GdbExec finish<cr>
-nnoremap <silent> <S-Down> :GdbExec step<cr>
-nnoremap <silent> <S-Right> :GdbExec next<cr>
-nnoremap <silent> <S-Left> :GdbToggle<cr>
-noremap <silent> <PageUp> :GdbExec up<cr>
-noremap <silent> <PageDown> :GdbExec down<cr>
+nnoremap <silent> <Insert>   :GdbContinue<cr>
+nnoremap <silent> <End>      :GdbBacktrace<cr>
+nnoremap <silent> <Home>     :GdbUntil<cr>
+nnoremap <silent> <S-Up>     :GdbExec finish<cr>
+nnoremap <silent> <S-Down>   :GdbExec step<cr>
+nnoremap <silent> <S-Right>  :GdbExec next<cr>
+nnoremap <silent> <S-Left>   :GdbToggle<cr>
+noremap  <silent> <PageUp>   :GdbExec up<cr>
+noremap  <silent> <PageDown> :GdbExec down<cr>
 
 function! s:start_debugging(cmd)
     cd /Users/dershokus/projects/test_application
@@ -306,9 +325,9 @@ autocmd FileType vim set foldmethod=marker
 " }}}
 
 
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
+let g:airline_left_sep      = ''
+let g:airline_left_alt_sep  = ''
+let g:airline_right_sep     = ''
 let g:airline_right_alt_sep = ''
 
 " {{{ Light line settings
@@ -380,11 +399,42 @@ endfunction
 
 
 " powerline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
+let g:airline_left_sep      = ''
+let g:airline_left_alt_sep  = ''
+let g:airline_right_sep     = ''
 let g:airline_right_alt_sep = ''
 " для tmux-like разделителя
 set fillchars=vert:\│
 
 hi VertSplit cterm=none ctermbg=none
+
+let g:clang_format#auto_format = 0
+
+function! s:Check()
+  try
+    let save_makeprg=&makeprg
+    set makeprg=./run_cppcheck.sh
+    " you may have to specify other files/extensions
+    :Make
+  finally
+    let &makeprg=save_makeprg
+  endtry
+endfunction
+
+nmap <leader>c :call <sid>Check()<cr>
+
+" Snippets variables
+let g:snips_author  = 'DerShokus'
+let g:author        = 'DerShokus'
+let g:snips_email   = 'lily.coder@gmail.com'
+let g:email         = 'lily.coder@gmail.com'
+let g:snips_github  = 'https://github.com/DerShokus'
+let g:github        = 'https://github.com/DerShokus'
+let g:snips_company = g:snips_author
+let g:company       = g:snips_author
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
