@@ -52,6 +52,7 @@ Plug 'dccmx/vim-lemon-syntax'
 Plug 'rking/ag.vim'
 Plug 'vim-scripts/google.vim'
 Plug 'aperezdc/vim-template'
+Plug 'junegunn/vim-easy-align'
 "
 " {{{ Colorschemes
 Plug 'altercation/vim-colors-solarized'
@@ -67,7 +68,7 @@ Plug 'tpope/vim-fugitive'
 " }}}
 
 " {{{ Try it at free time
-Plug 'junegunn/vim-easy-align'
+Plug 'fisadev/FixedTaskList.vim'
 " Gdb helper (can't to build)
 "Plug 'ManOfTeflon/exterminator'
 " }}}
@@ -77,18 +78,16 @@ call plug#end()
 " }}}
 
 
+set background=dark
+colorscheme jellybeans
+
 if has("gui_running")
-    set background=dark
-    colorscheme jellybeans
     if has("gui_macvim")
         set guifont=Menlo:h12
     else
-        set guifont=Anonymous\ Pro\ for\ Powerline\ 14
+        set guifont=Inconsolata \ Pro\ for\ Powerline\ 14
     endif
 else
-    set background=dark
-    "colorscheme gruvbox
-    colorscheme jellybeans
     set t_Co=256
 endif
 
@@ -109,41 +108,41 @@ autocmd FileType c,cpp let &colorcolumn=join(range(81,256),",")
 " {{{  General
 syntax on
 """ Base edit settings
-set backspace=2                        " do backspace on eol and tabs
-set encoding=utf-8                     " default character set
-set nocompatible                       " disable vi
-set noautochdir                        " do not change directory
-set wrap                               " do wrap
-set linebreak                          " do not break words
-set hidden                             " do not reset buffer
-set showcmd                            " auto complete for commands
-set autoread                           " auto reread file
-set confirm                            " show dialogs
-set laststatus=2                       " size of status bar
-set sessionoptions=curdir,buffers,tabpages " TODO?
-set clipboard=unnamed                  " use system copy/past buffer
+set backspace=2                             " do backspace on eol and tabs
+set encoding=utf-8                          " default character set
+set nocompatible                            " disable vi
+set noautochdir                             " do not change directory
+set wrap                                    " do wrap
+set linebreak                               " do not break words
+set hidden                                  " do not reset buffer
+set showcmd                                 " auto complete for commands
+set autoread                                " auto reread file
+set confirm                                 " show dialogs
+set laststatus=2                            " size of status bar
+set sessionoptions=curdir,buffers,tabpages  "
+set clipboard=unnamed                       " use system copy/past buffer
 " be silently
 set novisualbell
 set noerrorbells
-set t_vb=                              " do nothing
-set title                              " show title in the top of console
+set t_vb=                                   " do nothing
+set title                                   " show title in the top of console
 """ Tabs and spaces """
-set shiftwidth=4                       " size of spaces
-set tabstop=4                          " size of tabs
-set softtabstop=4                      " size of soft tabs
-set autoindent                         " enable auto indents
-set expandtab                          " tabs to spaces
-set smartindent                        " tabs after { and others
+set shiftwidth=4                            " size of spaces
+set tabstop=4                               " size of tabs
+set softtabstop=4                           " size of soft tabs
+set autoindent                              " enable auto indents
+set expandtab                               " tabs to spaces
+set smartindent                             " tabs after { and others
 
 """
-set nobackup        " do not create backup files
-set noswapfile      " do not create swap files
+set nobackup                                " do not create backup files
+set noswapfile                              " do not create swap files
 
 """ Search """
-set hlsearch            " highlight search result
+set hlsearch                                " highlight search result
 set ignorecase
-set smartcase           " if all in low case - search without case
-set incsearch           " searching by typing
+set smartcase                               " if all in low case - search without case
+set incsearch                               " searching by typing
 
 "" Use the same symbols as TextMate for tabstops and EOLs
 set list
@@ -207,28 +206,31 @@ vmap <C-k>      <C-o>k
 vmap <C-h>      <C-o>b
 vmap <C-l>      <C-o>w
 
-" перходим по вкладкам по Alt-n или CMD-n
-if has('mac')
-    map <D-1> :tabfirst<cr>
-    map <D-2> 2gt
-    map <D-3> 3gt
-    map <D-4> 4gt
-    map <D-5> 5gt
-    map <D-6> 6gt
-    map <D-7> 7gt
-    map <D-8> 8gt
-    map <D-9> 9gt
-    map <D-0> :tablast<cr>
-else
-    map <A-1> :tabfirst<cr>
-    map <A-2> 2gt
-    map <A-3> 3gt
-    map <A-4> 4gt
-    map <A-5> 5gt
-    map <A-6> 6gt
-    map <A-7> 7gt
-    map <A-8> 8gt
-    map <A-9> :tablast<cr>
+
+if has("gui_running")
+    " перходим по вкладкам по Alt-n или CMD-n
+    if has('mac')
+        map <D-1> :tabfirst<cr>
+        map <D-2> 2gt
+        map <D-3> 3gt
+        map <D-4> 4gt
+        map <D-5> 5gt
+        map <D-6> 6gt
+        map <D-7> 7gt
+        map <D-8> 8gt
+        map <D-9> 9gt
+        map <D-0> :tablast<cr>
+    else
+        map <A-1> :tabfirst<cr>
+        map <A-2> 2gt
+        map <A-3> 3gt
+        map <A-4> 4gt
+        map <A-5> 5gt
+        map <A-6> 6gt
+        map <A-7> 7gt
+        map <A-8> 8gt
+        map <A-9> :tablast<cr>
+    endif
 endif
 
 
@@ -253,7 +255,6 @@ nmap <leader>t :Dispatch ctest --output-on-failure<cr>
 nmap <leader>c :Dispatch cppcheck .<cr>
 
 nmap <C-]> :YcmCompleter GoTo<cr>
-nmap <C-TAB> :A<cr>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -438,3 +439,9 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+
+"{{{ TaskList
+let g:tlWindowPosition = 0 " Open on the bottom
+let g:tlTokenList = ['TODO', 'FIXME', 'NOTE']
+"}}}
