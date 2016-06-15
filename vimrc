@@ -37,8 +37,8 @@ Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
 Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && bash ./install --clang-completer' }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'gilligan/vim-lldb'
-Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
+"Plug 'gilligan/vim-lldb'
+"Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-dispatch'
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
