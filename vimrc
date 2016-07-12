@@ -9,18 +9,20 @@
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Заменяет стандартную <leader> с '\' на ','
+" Replace a default <leader> from '\' to ','
 " Changing "mapleader" after that has no effect for already defined mappings.
 let mapleader = ','
 
 
-" {{{ Plugins
 
+
+" {{{ Plugins
 call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
 Plug 'powerman/vim-plugin-viewdoc'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdcommenter'
 Plug 'majutsushi/tagbar'
 
 " Just fot Vim 7.4 version
@@ -35,10 +37,8 @@ Plug 'will133/vim-dirdiff'
 Plug 'mileszs/ack.vim'
 Plug 'MattesGroeger/vim-bookmarks'
 Plug 'kien/ctrlp.vim'
-Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && bash ./install --clang-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && bash ./install.py --clang-completer' }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'gilligan/vim-lldb'
-Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-dispatch'
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
@@ -60,6 +60,8 @@ Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
 Plug 'sjl/badwolf'
 Plug 'nanotech/jellybeans.vim'
+Plug 'joshdick/onedark.vim'
+Plug 'joshdick/airline-onedark.vim'
 " }}}
 "
 " {{{ Git helpers
@@ -69,17 +71,31 @@ Plug 'tpope/vim-fugitive'
 
 " {{{ Try it at free time
 Plug 'fisadev/FixedTaskList.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'lekv/vim-clewn'
+"Plug 'rhysd/vim-grammarous'
 " Gdb helper (can't to build)
 "Plug 'ManOfTeflon/exterminator'
 " }}}
+
+
+if has('nvim')
+    Plug 'critiqjo/lldb.nvim'
+    Plug 'neomake/neomake'
+    Plug 'kassio/neoterm'
+else " old good vim :)
+    Plug 'gilligan/vim-lldb' " It's little bit broken
+    Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
+endif
 
 call plug#end()
 
 " }}}
 
 
+" {{{ Appearance
 set background=dark
-colorscheme jellybeans
+colorscheme gruvbox
 
 if has("gui_running")
     if has("gui_macvim")
@@ -87,9 +103,15 @@ if has("gui_running")
     else
         set guifont=Inconsolata \ Pro\ for\ Powerline\ 14
     endif
+elseif has('nvim')
+    " termguicolors
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 else
-    set t_Co=256
+    set termguicolors
+    " Clean background colors
+    set t_ut=
 endif
+" }}}
 
 
 
@@ -162,6 +184,7 @@ if &term =~ '^screen'
     set ttymouse=xterm2
 endif
 
+" Ruler instead of numbers
 set relativenumber
 set number
 
@@ -207,33 +230,6 @@ vmap <C-h>      <C-o>b
 vmap <C-l>      <C-o>w
 
 
-if has("gui_running")
-    " перходим по вкладкам по Alt-n или CMD-n
-    if has('mac')
-        map <D-1> :tabfirst<cr>
-        map <D-2> 2gt
-        map <D-3> 3gt
-        map <D-4> 4gt
-        map <D-5> 5gt
-        map <D-6> 6gt
-        map <D-7> 7gt
-        map <D-8> 8gt
-        map <D-9> 9gt
-        map <D-0> :tablast<cr>
-    else
-        map <A-1> :tabfirst<cr>
-        map <A-2> 2gt
-        map <A-3> 3gt
-        map <A-4> 4gt
-        map <A-5> 5gt
-        map <A-6> 6gt
-        map <A-7> 7gt
-        map <A-8> 8gt
-        map <A-9> :tablast<cr>
-    endif
-endif
-
-
 " Очень удобно т.к. не надо наживать шифт
 " (главное не замапить обратно т.к. рекурсия)
 map ; :
@@ -258,54 +254,10 @@ nmap <C-]> :YcmCompleter GoTo<cr>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
 " }}}
-
-
-" {{{ Gdb wrapper options
-
-function! s:get_range()
-  " Why is this not a built-in Vim script function?!
-  let [lnum1, col1] = getpos("'<")[1:2]
-  let [lnum2, col2] = getpos("'>")[1:2]
-  let lines = getline(lnum1, lnum2)
-  let lines[-1] = lines[-1][: col2 - (&selection == 'inclusive' ? 1 : 2)]
-  let lines[0] = lines[0][col1 - 1:]
-  return join(lines, "\n")
-endfunction
-
-nnoremap <silent> & :exec 'VimGrep ' . expand('<cword>')<cr>
-vnoremap <silent> & :exec 'VimGrep ' . s:get_range()
-comm! -nargs=0 -range GdbVEval exec 'GdbEval ' . s:get_range()
-
-nnoremap <silent> <F6>  :exec "GdbEval " . expand("<cword>")<CR>
-vnoremap <silent> <F6>  :GdbVEval<cr>
-nnoremap <silent> <F5>  :GdbLocals<CR>
-nnoremap <silent> <F4>  :GdbNoTrack<CR>
-
-nnoremap <silent> <Insert>   :GdbContinue<cr>
-nnoremap <silent> <End>      :GdbBacktrace<cr>
-nnoremap <silent> <Home>     :GdbUntil<cr>
-nnoremap <silent> <S-Up>     :GdbExec finish<cr>
-nnoremap <silent> <S-Down>   :GdbExec step<cr>
-nnoremap <silent> <S-Right>  :GdbExec next<cr>
-nnoremap <silent> <S-Left>   :GdbToggle<cr>
-noremap  <silent> <PageUp>   :GdbExec up<cr>
-noremap  <silent> <PageDown> :GdbExec down<cr>
-
-function! s:start_debugging(cmd)
-    cd /Users/dershokus/projects/test_application
-    exec 'Dbg ' . a:cmd
-endfunction
-command! -nargs=1 DbgWrapper    call s:start_debugging(<f-args>)
-
-nnoremap <silent> <leader>B :DbgWrapper ./main<cr>
-
-" }}}
-
 
 " Unite
 "let g:unite_source_grep_command = 'ag'
@@ -320,8 +272,16 @@ let g:unite_source_rec_async_command =
 
 " Auto commands {{{
 
-" Delete all ending spaces before save
-autocmd FileType c,cpp,java,php autocmd BufWritePre * :%s/\s\+$//e
+" Delete trailing whitespace and do not move a cursor.
+function! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+autocmd BufWritePre c,cpp,perl :call <SID>StripTrailingWhitespaces()
+
+" Just for vim.
 autocmd FileType vim set foldmethod=marker
 " }}}
 
@@ -404,6 +364,7 @@ let g:airline_left_sep      = ''
 let g:airline_left_alt_sep  = ''
 let g:airline_right_sep     = ''
 let g:airline_right_alt_sep = ''
+let g:airline_theme = 'gruvbox'
 " для tmux-like разделителя
 set fillchars=vert:\│
 
@@ -440,8 +401,10 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+let g:onedark_terminal_italics = 1
 
 "{{{ TaskList
 let g:tlWindowPosition = 0 " Open on the bottom
 let g:tlTokenList = ['TODO', 'FIXME', 'NOTE']
 "}}}
+"
