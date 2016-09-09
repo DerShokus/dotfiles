@@ -1,11 +1,11 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "o-o            o-o  o        o                   o   o o-O-o o   o o--o    o-o
 "|  \          |     |        | /                 |   |   |   |\ /| |   |  /
 "|   O o-o o-o  o-o  O--o o-o OO   o  o o-o       o   o   |   | O | O-Oo  O
 "|  /  |-' |       | |  | | | | \  |  |  \         \ /    |   |   | |  \   \
 "o-o   o-o o   o--o  o  o o-o o  o o--o o-o     O   o   o-O-o o   o o   o   o-o
 "
-" My custom .vimrc config 2015.
+" My custom .vimrc config 2016.
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -13,57 +13,147 @@
 " Changing "mapleader" after that has no effect for already defined mappings.
 let mapleader = ','
 
-
-
-
 " {{{ Plugins
 call plug#begin('~/.vim/plugged')
 
 " Make sure you use single quotes
 Plug 'powerman/vim-plugin-viewdoc'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/nerdcommenter'
-Plug 'majutsushi/tagbar'
 
 " Just fot Vim 7.4 version
 if v:version >= 704
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+    """ Settings
+    let g:snips_author  = 'DerShokus'
+    let g:author        = 'DerShokus'
+    let g:snips_email   = 'lily.coder@gmail.com'
+    let g:email         = 'lily.coder@gmail.com'
+    let g:snips_github  = 'https://github.com/DerShokus'
+    let g:github        = 'https://github.com/DerShokus'
+    let g:snips_company = g:snips_author
+    let g:company       = g:snips_author
+
+    let g:UltiSnipsExpandTrigger="<tab>"
+    let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 endif
 
 Plug 'rhysd/vim-clang-format'
+""" Settings
+let g:clang_format#auto_format = 0
 
 Plug 'mhinz/vim-startify'
 Plug 'will133/vim-dirdiff'
-Plug 'mileszs/ack.vim'
 Plug 'MattesGroeger/vim-bookmarks'
-Plug 'kien/ctrlp.vim'
-Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && bash ./install.py --clang-completer' }
+
+Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && python ./install.py --clang-completer' }
+""" Settings
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
+let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
+let g:clang_complete_macros = 1
+""" Maps
+nmap <C-]> :YcmCompleter GoTo<cr>
+
+
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'christoomey/vim-tmux-navigator'
+
 Plug 'tpope/vim-dispatch'
+""" Maps
+nmap <leader>m :Make<cr>
+nmap <leader>t :Dispatch ctest --output-on-failure<cr>
+nmap <leader>c :Dispatch cppcheck .<cr>
+
+
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
+
 Plug 'bling/vim-airline'
+""" Settings
+let g:airline_left_sep      = ''
+let g:airline_left_alt_sep  = ''
+let g:airline_right_sep     = ''
+let g:airline_right_alt_sep = ''
+let g:airline_left_sep      = ''
+let g:airline_left_alt_sep  = ''
+let g:airline_right_sep     = ''
+let g:airline_right_alt_sep = ''
+let g:airline_theme = 'gruvbox'
+" для tmux-like разделителя
+
 "Plug 'ryanoasis/vim-devicons' | Plug 'ryanoasis/nerd-fonts', { 'do': 'bash ./install.sh' }
+
 Plug 'Shougo/unite.vim' | Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
+""" Settings
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_rec_async_command =
+        \ ['ag', '--follow', '--nocolor', '--nogroup',
+        \  '--hidden', '']
+""" Maps
+nnoremap <space>/ :Unite grep:.<cr>
+"nmap <leader>l :Unite -buffer-name=files buffer<cr>
+
 Plug 'rbgrouleff/bclose.vim'
+""" Maps
+nmap <leader>q :Bclose<cr>
+
 Plug 'vim-scripts/a.vim'
 Plug 'dccmx/vim-lemon-syntax'
-Plug 'rking/ag.vim'
 Plug 'vim-scripts/google.vim'
 Plug 'aperezdc/vim-template'
+
 Plug 'junegunn/vim-easy-align'
-"
+""" Maps
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+" {{{ Narigation
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
+""" Maps
+nmap <F8> :NERDTreeToggle<CR>
+nmap <leader>ff : NERDTreeFind<cr>
+
+Plug 'kien/ctrlp.vim'
+""" Maps
+nmap <leader>l :CtrlPBuffer<cr>
+
+Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
+"nmap <leader>l :FufBuffer<cr>
+
+Plug 'majutsushi/tagbar'
+""" Settings
+let g:tagbar_iconchars = ['▸', '▾']
+""" Maps
+nmap <F9> :TagbarToggle<CR>
+
+" }}}
+
+" {{{ Search tools
+Plug 'mileszs/ack.vim'
+
+Plug 'rking/ag.vim'
+""" Settings
+let g:ag_highlight=1
+" }}}
+
+
 " {{{ Colorschemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
+
 Plug 'morhetz/gruvbox'
+""" Settings
+let g:gruvbox_contrast_dark = 'hard'
+
 Plug 'sjl/badwolf'
 Plug 'nanotech/jellybeans.vim'
+
 Plug 'joshdick/onedark.vim'
+""" Settings
+let g:onedark_terminal_italics = 1
+
 Plug 'joshdick/airline-onedark.vim'
 " }}}
-"
+
 " {{{ Git helpers
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -71,8 +161,11 @@ Plug 'tpope/vim-fugitive'
 
 " {{{ Try it at free time
 Plug 'fisadev/FixedTaskList.vim'
+"""" Settings
+let g:tlWindowPosition = 0 " Open on the bottom
+let g:tlTokenList = ['TODO', 'FIXME', 'NOTE']
+
 Plug 'sheerun/vim-polyglot'
-Plug 'lekv/vim-clewn'
 "Plug 'rhysd/vim-grammarous'
 " Gdb helper (can't to build)
 "Plug 'ManOfTeflon/exterminator'
@@ -84,8 +177,9 @@ if has('nvim')
     Plug 'neomake/neomake'
     Plug 'kassio/neoterm'
 else " old good vim :)
-    Plug 'gilligan/vim-lldb' " It's little bit broken
-    Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
+    "Plug 'gilligan/vim-lldb' " It's little bit broken
+    Plug 'lekv/vim-clewn'
+    "Plug 'jeaye/color_coded', { 'do': 'cmake -f . && make && make install' }
 endif
 
 call plug#end()
@@ -113,19 +207,7 @@ else
 endif
 " }}}
 
-
-
-let g:tagbar_iconchars = ['▸', '▾']
-let g:webdevicons_enable = 0
-let g:ag_highlight=1
-" for ultisnips
-let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
-let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
-let g:clang_complete_macros = 1
-
 autocmd FileType c,cpp let &colorcolumn=join(range(81,256),",")
-
-
 
 " {{{  General
 syntax on
@@ -236,114 +318,20 @@ map ; :
 
 " }}}
 
-
-" {{{ Plugin's keymaps
-nmap <F9> :TagbarToggle<CR>
-nmap <F8> :NERDTreeToggle<CR>
-nmap <leader>q :Bclose<cr>
-nmap <leader>ff : NERDTreeFind<cr>
-
-"nmap <leader>l :Unite -buffer-name=files buffer<cr>
-"nmap <leader>l :FufBuffer<cr>
-nmap <leader>l :CtrlPBuffer<cr>
-nmap <leader>m :Make<cr>
-nmap <leader>t :Dispatch ctest --output-on-failure<cr>
-nmap <leader>c :Dispatch cppcheck .<cr>
-
-nmap <C-]> :YcmCompleter GoTo<cr>
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-" }}}
-
-" Unite
-"let g:unite_source_grep_command = 'ag'
-"nnoremap <space>/ :Unite grep:.<cr>
-"
-" Using ag as recursive command.
-let g:unite_source_rec_async_command =
-        \ ['ag', '--follow', '--nocolor', '--nogroup',
-        \  '--hidden', '']
-
-
-
 " Auto commands {{{
 
 " Delete trailing whitespace and do not move a cursor.
-function! <SID>StripTrailingWhitespaces()
+function! StripTrailingWhitespaces()
     let l = line(".")
     let c = col(".")
     %s/\s\+$//e
     call cursor(l, c)
 endfun
-autocmd BufWritePre c,cpp,perl :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre * :call StripTrailingWhitespaces()
 
 " Just for vim.
 autocmd FileType vim set foldmethod=marker
 " }}}
-
-
-let g:airline_left_sep      = ''
-let g:airline_left_alt_sep  = ''
-let g:airline_right_sep     = ''
-let g:airline_right_alt_sep = ''
-
-" {{{ Light line settings
-" Try it ;)
-"let g:lightline = {
-"      \ 'active': {
-"      \   'left': [ [ 'mode', 'paste' ],
-"      \             [ 'fugitive', 'filename' ] ]
-"      \ },
-"      \ 'component_function': {
-"      \   'fugitive': 'LightLineFugitive',
-"      \   'readonly': 'LightLineReadonly',
-"      \   'modified': 'LightLineModified',
-"      \   'filename': 'LightLineFilename'
-"      \ },
-"      \ }
-"" it's very sad but this symbols a slowly on my iTerm2 ;_;
-""      \ 'separator': { 'left': '⮀', 'right': '⮂' },
-""      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
-"
-"function! LightLineModified()
-"  if &filetype == "help"
-"    return ""
-"  elseif &modified
-"    return "+"
-"  elseif &modifiable
-"    return ""
-"  else
-"    return ""
-"  endif
-"endfunction
-"
-"function! LightLineReadonly()
-"  if &filetype == "help"
-"    return ""
-"  elseif &readonly
-"    return "RO"
-"  else
-"    return ""
-"  endif
-"endfunction
-"
-"function! LightLineFugitive()
-"  return exists('*fugitive#head') ? fugitive#head() : ''
-"endfunction
-"
-"function! LightLineFilename()
-"  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-"       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
-"       \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-"endfunction
-" }}}
-
-
-
 
 "{{{ some special conde style %)
 function! BracketInsert()
@@ -359,18 +347,10 @@ endfunction
 "}}}
 
 
-" powerline symbols
-let g:airline_left_sep      = ''
-let g:airline_left_alt_sep  = ''
-let g:airline_right_sep     = ''
-let g:airline_right_alt_sep = ''
-let g:airline_theme = 'gruvbox'
-" для tmux-like разделителя
 set fillchars=vert:\│
 
-hi VertSplit cterm=none ctermbg=none
+"hi VertSplit cterm=none ctermbg=none
 
-let g:clang_format#auto_format = 0
 
 function! s:Check()
   try
@@ -384,27 +364,3 @@ function! s:Check()
 endfunction
 
 nmap <leader>c :call <sid>Check()<cr>
-
-" Snippets variables
-let g:snips_author  = 'DerShokus'
-let g:author        = 'DerShokus'
-let g:snips_email   = 'lily.coder@gmail.com'
-let g:email         = 'lily.coder@gmail.com'
-let g:snips_github  = 'https://github.com/DerShokus'
-let g:github        = 'https://github.com/DerShokus'
-let g:snips_company = g:snips_author
-let g:company       = g:snips_author
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-let g:onedark_terminal_italics = 1
-
-"{{{ TaskList
-let g:tlWindowPosition = 0 " Open on the bottom
-let g:tlTokenList = ['TODO', 'FIXME', 'NOTE']
-"}}}
-"
