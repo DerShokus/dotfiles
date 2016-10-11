@@ -23,7 +23,6 @@ Plug 'scrooloose/nerdcommenter'
 " Just fot Vim 7.4 version
 if v:version >= 704
     Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-    """ Settings
     let g:snips_author  = 'DerShokus'
     let g:author        = 'DerShokus'
     let g:snips_email   = 'lily.coder@gmail.com'
@@ -34,12 +33,11 @@ if v:version >= 704
     let g:company       = g:snips_author
 
     let g:UltiSnipsExpandTrigger="<tab>"
-    let g:UltiSnipsJumpForwardTrigger="<c-b>"
-    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+    let g:UltiSnipsJumpForwardTrigger="<tab>"
+    let g:UltiSnipsJumpBackwardTrigger="<up>"
 endif
 
 Plug 'rhysd/vim-clang-format'
-""" Settings
 let g:clang_format#auto_format = 0
 
 Plug 'mhinz/vim-startify'
@@ -47,27 +45,28 @@ Plug 'will133/vim-dirdiff'
 Plug 'MattesGroeger/vim-bookmarks'
 
 Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && python ./install.py --clang-completer' }
-""" Settings
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
 let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
 let g:clang_complete_macros = 1
-""" Maps
 nmap <C-]> :YcmCompleter GoTo<cr>
+nmap <leader>fm :YcmCompleter FixIt<cr>
+nmap <leader>gt :YcmCompleter GetType<cr>
 
 
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'tpope/vim-dispatch'
-""" Maps
-nmap <leader>m :Make<cr>
+nmap <leader>m :make<cr>
 nmap <leader>t :Dispatch ctest --output-on-failure<cr>
 nmap <leader>c :Dispatch cppcheck .<cr>
+
+Plug 'skywind3000/asyncrun.vim'
 
 
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
 
-Plug 'bling/vim-airline'
+"Plug 'bling/vim-airline'
 """ Settings
 let g:airline_left_sep      = ''
 let g:airline_left_alt_sep  = ''
@@ -88,12 +87,10 @@ let g:unite_source_grep_command = 'ag'
 let g:unite_source_rec_async_command =
         \ ['ag', '--follow', '--nocolor', '--nogroup',
         \  '--hidden', '']
-""" Maps
 nnoremap <space>/ :Unite grep:.<cr>
 "nmap <leader>l :Unite -buffer-name=files buffer<cr>
 
 Plug 'rbgrouleff/bclose.vim'
-""" Maps
 nmap <leader>q :Bclose<cr>
 
 Plug 'vim-scripts/a.vim'
@@ -102,19 +99,19 @@ Plug 'vim-scripts/google.vim'
 Plug 'aperezdc/vim-template'
 
 Plug 'junegunn/vim-easy-align'
-""" Maps
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 " {{{ Narigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } | Plug 'Xuyuanp/nerdtree-git-plugin'
-""" Maps
 nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>ff : NERDTreeFind<cr>
 
 Plug 'kien/ctrlp.vim'
-""" Maps
 nmap <leader>l :CtrlPBuffer<cr>
+
+Plug 'jlanzarotta/bufexplorer'
+nmap <F5> :BufExplorer<cr>
 
 Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
 "nmap <leader>l :FufBuffer<cr>
@@ -122,16 +119,18 @@ Plug 'vim-scripts/FuzzyFinder' | Plug 'vim-scripts/L9'
 Plug 'majutsushi/tagbar'
 """ Settings
 let g:tagbar_iconchars = ['▸', '▾']
-""" Maps
 nmap <F9> :TagbarToggle<CR>
 
+" }}}
+
+" {{{ Editing
+Plug 'terryma/vim-multiple-cursors'
 " }}}
 
 " {{{ Search tools
 Plug 'mileszs/ack.vim'
 
 Plug 'rking/ag.vim'
-""" Settings
 let g:ag_highlight=1
 " }}}
 
@@ -141,17 +140,10 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
 Plug 'morhetz/gruvbox'
-""" Settings
 let g:gruvbox_contrast_dark = 'hard'
 
 Plug 'sjl/badwolf'
 Plug 'nanotech/jellybeans.vim'
-
-Plug 'joshdick/onedark.vim'
-""" Settings
-let g:onedark_terminal_italics = 1
-
-Plug 'joshdick/airline-onedark.vim'
 " }}}
 
 " {{{ Git helpers
@@ -161,12 +153,17 @@ Plug 'tpope/vim-fugitive'
 
 " {{{ Try it at free time
 Plug 'fisadev/FixedTaskList.vim'
-"""" Settings
 let g:tlWindowPosition = 0 " Open on the bottom
 let g:tlTokenList = ['TODO', 'FIXME', 'NOTE']
 
+Plug 'glidenote/memolist.vim'
+let g:memolist_path = "~/dotfiles/memolist/"
+map <leader>nl :MemoList<cr>
+map <leader>nn :MemoNew<cr>
+map <leader>ng :MemoGrep<cr>
+
 Plug 'sheerun/vim-polyglot'
-"Plug 'rhysd/vim-grammarous'
+Plug 'rhysd/vim-grammarous'
 " Gdb helper (can't to build)
 "Plug 'ManOfTeflon/exterminator'
 " }}}
@@ -250,10 +247,10 @@ set incsearch                               " searching by typing
 
 "" Use the same symbols as TextMate for tabstops and EOLs
 set list
-set listchars=tab:▸\ ,eol:¬
+set listchars=tab:▸\ ,eol:¬,trail:·
 
 "" Set up spell checker
-set spl=en spell
+set spl=en,ru
 set nospell
 
 set nowrap
@@ -261,7 +258,7 @@ set cursorline
 
 " Splists resizing by mouse
 set mouse=a                            " enable mouse in console
-if &term =~ '^screen'
+if &term =~ '^xterm'
     " tmux knows the extended mouse mode
     set ttymouse=xterm2
 endif
@@ -269,6 +266,10 @@ endif
 " Ruler instead of numbers
 set relativenumber
 set number
+
+""" Menu
+set wildmenu
+set wildmode=longest:full,full
 
 " }}}
 
