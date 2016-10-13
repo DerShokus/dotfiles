@@ -57,7 +57,7 @@ Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'tpope/vim-dispatch'
-nmap <leader>m :make<cr>
+nmap <leader>m :call <sid>CustomMake('cmake', '--build . -- -j9')<cr>
 nmap <leader>t :Dispatch ctest --output-on-failure<cr>
 nmap <leader>c :Dispatch cppcheck .<cr>
 
@@ -108,6 +108,7 @@ nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>ff : NERDTreeFind<cr>
 
 Plug 'kien/ctrlp.vim'
+Plug 'junegunn/fzf.vim'
 nmap <leader>l :CtrlPBuffer<cr>
 
 Plug 'jlanzarotta/bufexplorer'
@@ -353,15 +354,15 @@ set fillchars=vert:\│
 "hi VertSplit cterm=none ctermbg=none
 
 
-function! s:Check()
+function! s:CustomMake(prg, params)
   try
     let save_makeprg=&makeprg
-    set makeprg=./run_cppcheck.sh
+    let &makeprg = a:prg
     " you may have to specify other files/extensions
-    :Make
+    execute 'Make ' . a:params
   finally
     let &makeprg=save_makeprg
   endtry
 endfunction
 
-nmap <leader>c :call <sid>Check()<cr>
+nmap <leader>c :call <sid>CustomMake('./run_cppcheck.sh', '')<cr>
