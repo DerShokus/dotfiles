@@ -57,7 +57,8 @@ Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'tpope/vim-dispatch'
-nmap <leader>m :call <sid>CustomMake('cmake', '--build . -- -j9')<cr>
+"nmap <leader>m :call <sid>CustomMake('cmake', '--build . -- -j9')<cr> -- tmux 2.3
+nmap <leader>m :AsyncRun cmake --build . -- -j9<cr>
 nmap <leader>t :Dispatch ctest --output-on-failure<cr>
 nmap <leader>c :Dispatch cppcheck .<cr>
 
