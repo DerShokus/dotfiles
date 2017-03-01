@@ -44,7 +44,9 @@ Plug 'mhinz/vim-startify'
 Plug 'will133/vim-dirdiff'
 Plug 'MattesGroeger/vim-bookmarks'
 
-Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && python ./install.py --clang-completer' }
+Plug 'fatih/vim-go'
+
+Plug 'Valloric/YouCompleteMe', { 'do': 'git pull --recurse-submodules && python ./install.py --clang-completer --gocode-completer' }
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
 let g:ycm_key_list_select_completion = [ '<C-n>', '<DOWN>' ]
 let g:clang_complete_macros = 1
@@ -52,18 +54,19 @@ nmap <C-]> :YcmCompleter GoTo<cr>
 nmap <leader>fm :YcmCompleter FixIt<cr>
 nmap <leader>gt :YcmCompleter GetType<cr>
 
+Plug 'lyuts/vim-rtags'
 
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'tpope/vim-dispatch'
-set shellpipe+=\ 
-nmap <leader>m :call <sid>CustomMake('cmake', '--build . -- -j9')<cr> -- tmux 2.3
-"nmap <leader>m :AsyncRun cmake --build . -- -j9<cr>
-nmap <leader>t :Dispatch ctest --output-on-failure<cr>
-nmap <leader>c :Dispatch cppcheck .<cr>
+"Plug 'tpope/vim-dispatch'
+"set shellpipe+=\ 
+"nmap <leader>m :call <sid>CustomMake('cmake', '--build . -- -j9')<cr> -- tmux 2.3
+"nmap <leader>t :Dispatch ctest --output-on-failure<cr>
+"nmap <leader>c :Dispatch cppcheck .<cr>
 
 Plug 'skywind3000/asyncrun.vim'
+nmap <leader>m :AsyncRun cmake --build . -- -j9<cr>
 
 
 "Plug 'itchyny/lightline.vim' "| Plug 'powerline/fonts', { 'do': 'bash ./install.sh' }
@@ -144,6 +147,7 @@ Plug 'tomasr/molokai'
 
 Plug 'morhetz/gruvbox'
 let g:gruvbox_contrast_dark = 'hard'
+Plug 'Marfisc/vorange'
 
 Plug 'sjl/badwolf'
 Plug 'nanotech/jellybeans.vim'
@@ -166,6 +170,9 @@ map <leader>nn :MemoNew<cr>
 map <leader>ng :MemoGrep<cr>
 
 Plug 'sheerun/vim-polyglot'
+"Plug 'vim-scripts/doxygen-support.vim'
+"Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
+
 Plug 'rhysd/vim-grammarous'
 " Gdb helper (can't to build)
 "Plug 'ManOfTeflon/exterminator'
@@ -207,7 +214,8 @@ else
 endif
 " }}}
 
-autocmd FileType c,cpp let &colorcolumn=join(range(81,256),",")
+"autocmd FileType c,cpp let &colorcolumn=join(range(81,256),",")
+let colorcolumn=81
 
 " {{{  General
 syntax on
@@ -224,7 +232,8 @@ set autoread                                " auto reread file
 set confirm                                 " show dialogs
 set laststatus=2                            " size of status bar
 set sessionoptions=curdir,buffers,tabpages  "
-set clipboard=unnamed                       " use system copy/past buffer
+"set clipboard=unnamed                       " use system copy/past buffer
+set clipboard+=unnamed
 " be silently
 set novisualbell
 set noerrorbells
@@ -337,6 +346,8 @@ autocmd BufWritePre cpp :call StripTrailingWhitespaces()
 autocmd FileType vim set foldmethod=marker
 " }}}
 
+nnoremap <leader>ev :e ~/.vimrc<cr>
+
 "{{{ some special conde style %)
 function! BracketInsert()
     let l:colum = col ('.')
@@ -368,3 +379,7 @@ function! s:CustomMake(prg, params)
 endfunction
 
 nmap <leader>c :call <sid>CustomMake('./run_cppcheck.sh', '')<cr>
+
+set lazyredraw 
+let html_no_rendering=1
+let g:ycm_autoclose_preview_window_after_insertion = 1
