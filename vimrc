@@ -113,7 +113,6 @@ nmap <F8> :NERDTreeToggle<CR>
 nmap <leader>ff : NERDTreeFind<cr>
 
 Plug 'kien/ctrlp.vim'
-Plug 'junegunn/fzf.vim'
 nmap <leader>l :CtrlPBuffer<cr>
 
 Plug 'jlanzarotta/bufexplorer'
@@ -131,6 +130,7 @@ nmap <F9> :TagbarToggle<CR>
 
 " {{{ Editing
 Plug 'terryma/vim-multiple-cursors'
+Plug 'romainl/vim-qf'
 " }}}
 
 " {{{ Search tools
@@ -340,7 +340,7 @@ function! StripTrailingWhitespaces()
     %s/\s\+$//e
     call cursor(l, c)
 endfun
-autocmd BufWritePre cpp :call StripTrailingWhitespaces()
+autocmd FileType c,cpp autocmd BufWritePre * :call StripTrailingWhitespaces()
 
 " Just for vim.
 autocmd FileType vim set foldmethod=marker
